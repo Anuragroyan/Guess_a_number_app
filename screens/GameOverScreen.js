@@ -1,13 +1,51 @@
-import { View, Text, StyleSheet, Image } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  useWindowDimensions,
+  Platform,
+} from "react-native";
 import Title from "../components/ui/Title";
 import PrimaryButton from "../components/ui/PrimaryButton";
 import Colors from "../constants/colors";
 
 function GameOverScreen({ roundsNumber, userNumber, onStartNewGame }) {
+  const { width, height } = useWindowDimensions();
+
+  // dynamic image for different device
+  // const imageHeight = height < 160 ? 70 : 60;
+  // const imageWidth = width < 160 ? 70 : 60;
+  // const imageRadius = imageHeight / 2;
+
+  let imageSize = 300;
+
+  if (width < 380) {
+    imageSize = 150;
+  }
+
+  if (height < 400) {
+    imageSize = 72;
+  }
+
+  const imageStyle = {
+    width: imageSize,
+    height: imageSize,
+    borderRadius: imageSize / 2,
+  };
+
   return (
     <View style={styles.rootContainer}>
       <Title>Game Over!</Title>
-      <View style={styles.imageContainer}>
+      <View
+        style={[
+          styles.imageContainer,
+          // { height: imageHeight },
+          // { width: imageWidth },
+          // { borderRadius: imageRadius },
+          imageStyle,
+        ]}
+      >
         <Image
           style={styles.image}
           source={require("../assets/images/success.png")}
@@ -26,6 +64,8 @@ function GameOverScreen({ roundsNumber, userNumber, onStartNewGame }) {
 
 export default GameOverScreen;
 
+// const deviceWidth = Dimensions.get("window").width;
+
 const styles = StyleSheet.create({
   rootContainer: {
     flex: 1,
@@ -34,10 +74,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   imageContainer: {
-    width: 300,
-    height: 300,
-    borderRadius: 150,
-    borderWidth: 3,
+    // width: deviceWidth < 300 ? 150 : 300,
+    // height: deviceWidth < 300 ? 150 : 300,
+    // borderRadius: 120,
+    borderWidth: Platform.select({ android: 2, ios: 0 }),
     borderColor: Colors.primary800,
     overflow: "hidden",
     margin: 36,
